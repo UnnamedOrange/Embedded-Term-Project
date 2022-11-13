@@ -7,4 +7,13 @@
  * See the LICENSE file in the repository root for full license text.
  */
 
-int main(int argn, char** argv) {}
+#include <thread>
+
+#include <user_main.h>
+
+int main()
+{
+    using namespace user;
+    std::thread user_main_thread([]() { delete new user_main(); });
+    user_main_thread.join();
+}
