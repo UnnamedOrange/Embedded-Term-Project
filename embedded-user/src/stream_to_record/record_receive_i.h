@@ -21,6 +21,6 @@ namespace user
     class record_receive_i
     {
     public:
-        virtual std::any record_receive() = 0;
+        virtual void record_receive(const std::any& record) = 0;
     };
 } // namespace user
