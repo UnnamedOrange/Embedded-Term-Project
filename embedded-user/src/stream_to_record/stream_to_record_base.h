@@ -26,7 +26,7 @@ namespace user
     class stream_to_record_base
     {
     private:
-        std::vector<std::shared_ptr<record_receive_i>> registered_receivers;
+        std::vector<std::weak_ptr<record_receive_i>> registered_receivers;
         // TODO: 设计成员变量。
 
     public:
@@ -47,13 +47,11 @@ namespace user
         {
             for (auto it = registered_receivers.begin();
                  it != registered_receivers.end(); ++it)
-            {
-                if (*it == receiver)
+                if ((*it).expired() || (*it).lock() == receiver)
                 {
                     registered_receivers.erase(it);
                     break;
                 }
-            }
         }
 
     public:
