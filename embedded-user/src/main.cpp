@@ -14,6 +14,5 @@
 int main()
 {
     using namespace user;
-    std::thread user_main_thread([]() { delete new user_main(); });
-    user_main_thread.join();
+    user_main user_main_module;
 }
