@@ -35,11 +35,11 @@ void mux_controller::background_routine()
             byte_array_t previous_byte_array;
             for (auto& [data_source, source_to_stream_object] : bindings)
             {
-                auto owner_equal = [](const auto& a, const auto& b) {
-                    return a.owner_before(b) == b.owner_before(a);
+                constexpr auto owner_equal = [](const auto& a, const auto& b) {
+                    return !a.owner_before(b) && !b.owner_before(a);
                 };
-                // 如果需要，则读取数据源。
-                if (owner_equal(data_source, previous_data_source))
+                // 如果数据源是另一个，则读取。
+                if (!owner_equal(data_source, previous_data_source))
                 {
                     auto data_source_shared = data_source.lock();
                     if (!data_source_shared)
