@@ -20,12 +20,12 @@ namespace user
     class source_to_stream_dummy : public source_to_stream_base
     {
     public:
-        /**
-         * @todo 实现 @ref next 函数。
-         */
         std::optional<byte_array_t> next() override
         {
-            return byte_array_t();
+            auto byte = next_byte();
+            if (byte)
+                return byte_array_t{*byte};
+            return std::nullopt;
         }
     };
 } // namespace user
