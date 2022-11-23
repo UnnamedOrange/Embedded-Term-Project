@@ -31,5 +31,14 @@ namespace user
         mux_controller mux; // 多路复用控制器将数据源和数据流裁剪器连接起来。
 
     public:
+        /**
+         * @brief 在多路复用控制器中绑定数据源和数据流裁剪器。
+         */
+        void bind(const std::shared_ptr<data_source_base>& data_source,
+                  const std::shared_ptr<source_to_stream_base>&
+                      source_to_stream_object)
+        {
+            mux.bind(data_source, source_to_stream_object);
+        }
     };
 } // namespace user

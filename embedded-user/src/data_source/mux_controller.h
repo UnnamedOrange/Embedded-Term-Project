@@ -24,14 +24,28 @@ namespace user
     /**
      * @brief 数据源多路复用控制器。将创建后台线程不断轮询数据源。
      *
-     * @todo 设计数据源多路复用控制器。
+     * @todo 实现数据源的轮询。
      */
     class mux_controller
     {
+    public:
+        /**
+         * @brief 保存绑定的数据源-数据流裁剪器的多重映射类型。
+         */
+        using bindings_t =
+            std::multimap<std::weak_ptr<data_source_base>,
+                          std::weak_ptr<source_to_stream_base>,
+                          std::owner_less<std::weak_ptr<data_source_base>>>;
+        /**
+         * @brief 键值对类型。
+         */
+        using key_value_t =
+            std::pair<bindings_t::key_type, bindings_t::mapped_type>;
+
     private:
-        std::multimap<std::weak_ptr<data_source_base>,
-                      std::weak_ptr<source_to_stream_base>>
-            bindings; // 绑定的数据源-数据流裁剪器。
+        bindings_t bindings; // 绑定的数据源-数据流裁剪器。
+        moodycamel::ReaderWriterQueue<key_value_t>
+            bindings_to_add; // 要新增的数据源-数据流裁剪器。
 
     private:
         bool exit_requested{};
@@ -41,7 +55,26 @@ namespace user
         {
             while (!exit_requested)
             {
-                // TODO: 实现后台线程。
+                auto delete_expired_bindings = [&]() { // 删除已经过期的绑定。
+                    for (auto it = bindings.begin(); it != bindings.end();)
+                    {
+                        if (it->first.expired() || it->second.expired())
+                            it = bindings.erase(it);
+                        else
+                            ++it;
+                    }
+                };
+                auto enroll_bindings_to_add =
+                    [&]() { // 将待新增的数据源-数据流裁剪器加入到绑定列表中。
+                        key_value_t kv;
+                        while (bindings_to_add.try_dequeue(kv))
+                            bindings.insert(kv);
+                    };
+                };
+
+                delete_expired_bindings();
+                enroll_bindings_to_add();
+                // TODO: 实现数据源的轮询。
             }
         }
 
@@ -50,6 +83,17 @@ namespace user
         {
             exit_requested = true;
             background_thread.join();
+        }
+
+    public:
+        /**
+         * @brief 绑定数据源和数据流裁剪器。
+         */
+        void bind(const std::shared_ptr<data_source_base>& data_source,
+                  const std::shared_ptr<source_to_stream_base>&
+                      source_to_stream_object)
+        {
+            bindings_to_add.enqueue({data_source, source_to_stream_object});
         }
     };
 } // namespace user
