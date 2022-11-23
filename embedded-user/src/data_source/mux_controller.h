@@ -23,8 +23,6 @@ namespace user
 {
     /**
      * @brief 数据源多路复用控制器。将创建后台线程不断轮询数据源。
-     *
-     * @todo 实现数据源的轮询。
      */
     class mux_controller
     {
@@ -70,11 +68,37 @@ namespace user
                         while (bindings_to_add.try_dequeue(kv))
                             bindings.insert(kv);
                     };
+                auto poll_data_sources = [&]() { // 轮询数据源。
+                    std::weak_ptr<data_source_base> previous_data_source;
+                    byte_array_t previous_byte_array;
+                    for (auto& [data_source, source_to_stream_object] :
+                         bindings)
+                    {
+                        auto owner_equal = [](const auto& a, const auto& b) {
+                            return a.owner_before(b) == b.owner_before(a);
+                        };
+                        // 如果需要，则读取数据源。
+                        if (owner_equal(data_source, previous_data_source))
+                        {
+                            auto data_source_shared = data_source.lock();
+                            if (!data_source_shared)
+                                continue; // 防止线程安全问题。
+                            // 非阻塞读数据源。
+                            previous_byte_array = data_source_shared->read();
+                            previous_data_source = data_source;
+                        }
+                        auto source_to_stream_object_shared =
+                            source_to_stream_object.lock();
+                        if (!source_to_stream_object_shared)
+                            continue; // 防止线程安全问题。
+                        source_to_stream_object_shared->async_push(
+                            previous_byte_array);
+                    }
                 };
 
                 delete_expired_bindings();
                 enroll_bindings_to_add();
-                // TODO: 实现数据源的轮询。
+                poll_data_sources();
             }
         }
 
