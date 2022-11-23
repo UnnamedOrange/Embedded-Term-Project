@@ -59,7 +59,7 @@ namespace user
 
     public:
         /**
-         * @brief 工作线程获取裁剪后的下一个字节流。
+         * @brief 核心线程获取裁剪后的下一个字节流。
          *
          * @return std::optional<byte_array_t>
          * 如果缓冲区内的字节流可以完整裁剪，返回裁剪后的字节流。否则返回空。
