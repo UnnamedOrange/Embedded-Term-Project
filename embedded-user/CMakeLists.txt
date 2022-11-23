@@ -21,4 +21,5 @@ target_include_directories(
                             "${CMAKE_CURRENT_SOURCE_DIR}/dep/readerwriterqueue"
 )
 # Add sources.
-target_sources(${PROJECT_NAME} PRIVATE "src/main.cpp")
+file(GLOB_RECURSE CXX_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
+target_sources(${PROJECT_NAME} PRIVATE "${CXX_SOURCES}")
