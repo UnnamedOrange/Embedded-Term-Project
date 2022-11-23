@@ -47,7 +47,8 @@ namespace user
 
     private:
         bool exit_requested{};
-        std::thread background_thread{&mux_controller::background_thread, this};
+        std::thread background_thread{&mux_controller::background_routine,
+                                      this};
         // 后台线程。轮询数据源。
         void background_routine();
 
