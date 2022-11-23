@@ -14,6 +14,8 @@
 #include <thread>
 #include <vector>
 
+#include <readerwriterqueue.h>
+
 #include <data_source/data_source_base.h>
 #include <source_to_stream/source_to_stream_base.h>
 

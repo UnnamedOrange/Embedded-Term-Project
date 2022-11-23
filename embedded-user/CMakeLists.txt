@@ -16,6 +16,9 @@ else()
     target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Wpedantic) # -Werror
 endif()
 # Add additional include directories.
-target_include_directories(${PROJECT_NAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/src")
+target_include_directories(
+    ${PROJECT_NAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/src"
+                            "${CMAKE_CURRENT_SOURCE_DIR}/dep/readerwriterqueue"
+)
 # Add sources.
 target_sources(${PROJECT_NAME} PRIVATE "src/main.cpp")
