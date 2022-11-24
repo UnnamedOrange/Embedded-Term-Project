@@ -15,6 +15,7 @@
 
 #include "record_receive_i.h"
 #include <data_source/data_source_utility.h>
+#include <utils/interface_register.hpp>
 
 namespace user
 {
@@ -26,7 +27,8 @@ namespace user
     class stream_to_record_base
     {
     private:
-        std::vector<std::weak_ptr<record_receive_i>> registered_receivers;
+        using reg_t = utils::interface_register<record_receive_i>;
+        reg_t reg; // 注册的接收记录的对象。
         // TODO: 设计成员变量。
 
     public:
@@ -36,22 +38,17 @@ namespace user
         /**
          * @brief 注册接收记录的对象。
          */
-        void register_receiver(std::shared_ptr<record_receive_i> receiver)
+        void register_interface(const reg_t::shared_t& interface)
         {
-            registered_receivers.push_back(receiver);
+            reg.push_back(interface);
         }
         /**
-         * @brief 取消注册接收记录的对象。如果对象未注册，则不进行任何操作。
+         * @brief 取消注册某个接收记录的对象一次。
+         * 如果对象未注册，则不进行任何操作。
          */
-        void unregister_receiver(std::shared_ptr<record_receive_i> receiver)
+        void unregister_interface(const reg_t::shared_t& interface)
         {
-            for (auto it = registered_receivers.begin();
-                 it != registered_receivers.end(); ++it)
-                if ((*it).expired() || (*it).lock() == receiver)
-                {
-                    registered_receivers.erase(it);
-                    break;
-                }
+            reg.unregister_once(interface);
         }
 
     public:

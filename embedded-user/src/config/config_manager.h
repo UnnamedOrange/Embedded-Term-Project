@@ -16,6 +16,7 @@
 #include "config_change.h"
 #include "config_changed_i.h"
 #include "config_struct.h"
+#include <utils/interface_register.hpp>
 
 namespace user
 {
@@ -29,28 +30,24 @@ namespace user
     {
     private:
         config_struct cfg; // 当前配置。
-        std::vector<std::weak_ptr<config_changed_i>> registered_listeners;
+        using reg_t = utils::interface_register<config_changed_i>;
+        reg_t reg; // 注册的监听配置修改的对象。
 
     public:
         /**
          * @brief 注册监听配置修改的对象。
          */
-        void register_listener(std::shared_ptr<config_changed_i> listener)
+        void register_interface(const reg_t::shared_t& interface)
         {
-            registered_listeners.push_back(listener);
+            reg.push_back(interface);
         }
         /**
-         * @brief 取消注册监听配置修改的对象。如果对象未注册，则不进行任何操作。
+         * @brief 取消注册某个监听配置修改的对象一次。
+         * 如果对象未注册，则不进行任何操作。
          */
-        void unregister_receiver(std::shared_ptr<config_changed_i> listener)
+        void unregister_interface(const reg_t::shared_t& interface)
         {
-            for (auto it = registered_listeners.begin();
-                 it != registered_listeners.end(); ++it)
-                if ((*it).expired() || (*it).lock() == listener)
-                {
-                    registered_listeners.erase(it);
-                    break;
-                }
+            reg.unregister_once(interface);
         }
 
     public:
@@ -72,7 +69,7 @@ namespace user
 
             // 通知所有已注册的监听配置修改的对象。
             {
-                for (auto& listener : registered_listeners)
+                for (auto& listener : reg)
                     if (!listener.expired())
                         listener.lock()->config_changed(cfg);
             }
