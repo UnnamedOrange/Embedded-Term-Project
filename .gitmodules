@@ -1,3 +1,6 @@
 [submodule "embedded-user/dep/readerwriterqueue"]
 	path = embedded-user/dep/readerwriterqueue
 	url = https://github.com/cameron314/readerwriterqueue
+[submodule "embedded-user/dep/googletest"]
+	path = embedded-user/dep/googletest
+	url = https://github.com/google/googletest

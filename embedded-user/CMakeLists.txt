@@ -23,3 +23,6 @@ target_include_directories(
 # Add sources.
 file(GLOB_RECURSE CXX_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
 target_sources(${PROJECT_NAME} PRIVATE "${CXX_SOURCES}")
+
+# Add tests.
+add_subdirectory("test")
