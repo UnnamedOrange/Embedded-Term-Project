@@ -15,6 +15,7 @@
 #include "data_source_base.h"
 #include "data_source_type.h"
 #include "data_source_utility.h"
+#include <utils/system_clock.hpp>
 
 namespace user
 {
@@ -23,11 +24,22 @@ namespace user
      */
     class data_source_dummy : public data_source_base
     {
+    public:
+        using clock_t = utils::system_steady_clock;
+        /**
+         * @brief 每次读取的数据流的大小。
+         */
+        static constexpr size_t size_per_read = 20;
+        /**
+         * @brief 每次可读数据的间隔时间。
+         */
+        static constexpr clock_t::duration interval = 100ms;
+
     private:
         std::random_device rd;
         std::default_random_engine engine{rd()};
-        std::uniform_int_distribution<size_t> size_dist{0, 40};
         std::uniform_int_distribution<unsigned> byte_dist{0, 255};
+        clock_t::time_point last_time_point{clock_t::now()};
 
     public:
         data_source_type type() const override
@@ -37,8 +49,14 @@ namespace user
 
         byte_array_t read() override
         {
-            // 生成随机长度（0 到 40）、随机内容的字节流。
-            byte_array_t ret(size_dist(engine));
+            // 每经过 interval 可读取到一次新的数据。
+            {
+                if (clock_t::now() - last_time_point < interval)
+                    return {};
+                last_time_point = clock_t::now();
+            }
+
+            byte_array_t ret(size_per_read);
             for (auto& byte : ret)
                 byte = static_cast<byte_t>(engine());
             return ret;
