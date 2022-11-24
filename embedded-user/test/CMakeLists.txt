@@ -39,6 +39,10 @@ if(BUILD_TEST)
     file(GLOB_RECURSE CXX_TEST_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp")
     target_sources(${PROJECT_NAME} PRIVATE "${CXX_SOURCES}" "${CXX_TEST_SOURCES}")
     target_link_libraries(${PROJECT_NAME} gtest gtest_main)
+    # Static linking.
+    if(UNIX)
+        target_link_options(${PROJECT_NAME} PRIVATE -static -static-libgcc -static-libstdc++)
+    endif()
 
     gtest_discover_tests(${PROJECT_NAME})
 endif()

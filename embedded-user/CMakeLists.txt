@@ -23,6 +23,10 @@ target_include_directories(
 # Add sources.
 file(GLOB_RECURSE CXX_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
 target_sources(${PROJECT_NAME} PRIVATE "${CXX_SOURCES}")
+# Static linking.
+if(UNIX)
+    target_link_options(${PROJECT_NAME} PRIVATE -static -static-libgcc -static-libstdc++)
+endif()
 
 # Add tests.
 add_subdirectory("test")
