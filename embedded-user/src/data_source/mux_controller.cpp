@@ -9,6 +9,8 @@
 
 #include "mux_controller.h"
 
+#include <utils/owner_compare.hpp>
+
 using namespace user;
 
 void mux_controller::background_routine()
@@ -35,11 +37,8 @@ void mux_controller::background_routine()
             byte_array_t previous_byte_array;
             for (auto& [data_source, source_to_stream_object] : bindings)
             {
-                constexpr auto owner_equal = [](const auto& a, const auto& b) {
-                    return !a.owner_before(b) && !b.owner_before(a);
-                };
                 // 如果数据源是另一个，则读取。
-                if (!owner_equal(data_source, previous_data_source))
+                if (!utils::owner_equal(data_source, previous_data_source))
                 {
                     auto data_source_shared = data_source.lock();
                     if (!data_source_shared)
