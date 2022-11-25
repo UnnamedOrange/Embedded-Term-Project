@@ -9,22 +9,37 @@
 
 #pragma once
 
+#include <array>
+
 #include "source_to_stream_base.h"
+#include <data_source/data_source_utility.h>
 
 namespace user
 {
     /**
      * @brief 测试用数据流裁剪类。
-     * 裁剪后的数据流长一个字节，将输入原样输出。
+     * 裁剪后的数据流长四个字节，将输入原样输出。
      */
     class source_to_stream_dummy : public source_to_stream_base
     {
+    private:
+        size_t current_idx{};
+        std::array<byte_t, 4> buffer{};
+
     public:
         std::optional<byte_array_t> next() override
         {
-            auto byte = next_byte();
-            if (byte)
-                return byte_array_t{*byte};
+            // Note: next 函数一般要读取多个字节，
+            std::optional<byte_t> byte;
+            while ((byte = next_byte()))
+            {
+                buffer[current_idx++] = *byte;
+                if (current_idx >= buffer.size())
+                {
+                    current_idx = 0;
+                    return byte_array_t(buffer.begin(), buffer.end());
+                }
+            }
             return std::nullopt;
         }
     };
