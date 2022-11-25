@@ -21,6 +21,7 @@ namespace user
 {
     /**
      * @brief 测试用虚拟数据源。
+     * 每过 100ms 生成 20 字节数据。
      */
     class data_source_dummy : public data_source_base
     {
