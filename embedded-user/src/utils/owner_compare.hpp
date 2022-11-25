@@ -16,5 +16,5 @@ namespace utils
     inline bool owner_equal(const T1& a, const T2& b)
     {
         return !a.owner_before(b) && !b.owner_before(a);
-    };
+    }
 } // namespace utils
