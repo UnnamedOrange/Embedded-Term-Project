@@ -22,7 +22,7 @@ using namespace std::literals;
 /**
  * @brief 测试数据源多路复用器是否能够控制虚拟数据源。
  */
-TEST(data_source, dummy_source)
+TEST(data_source, dummy)
 {
     using namespace user;
 

@@ -1,7 +1,7 @@
 /**
- * @file test_stream_to_record.cpp
+ * @file test_user_main.cpp
  * @author UnnamedOrange
- * @brief 记录提取器相关单元测试。
+ * @brief `user_main` 相关单元测试。
  *
  * @copyright Copyright (c) UnnamedOrange. Licensed under the MIT License.
  * See the LICENSE file in the repository root for full license text.
@@ -21,9 +21,9 @@
 using namespace std::literals;
 
 /**
- * @brief 测试记录提取器能否配合前面的组件正常工作。
+ * @brief 测试 `user_main` 能否独立工作。
  */
-TEST(stream_to_record, dummy)
+TEST(user_main, dummy)
 {
     using namespace user;
 
@@ -59,15 +59,14 @@ TEST(stream_to_record, dummy)
     {
         user_main main_module;
         main_module.bind(dummy_source, dummy_source_to_stream);
+        main_module.register_object(dummy_stream_to_record);
 
         // 延时相应次数对应的时间。
         std::this_thread::sleep_for((0.5 + expected_batch) *
                                     data_source_dummy::interval);
-    }
-    // 测试核心模块的正常析构。
 
-    // 手动控制 stream_to_record 读取。
-    dummy_stream_to_record->read_all();
+        main_module.read_all();
+    }
 
     // 检查读入的字节数是否符合期望。
     EXPECT_EQ(dummy_receive->n_int32_received, expected_elements);
