@@ -30,7 +30,7 @@ TEST(data_source, dummy_source)
     auto dummy_source = std::make_shared<data_source_dummy>();
     auto dummy_source_to_stream = std::make_shared<source_to_stream_dummy>();
 
-    // 记录开始时间。
+    // 定义相关常量。
     constexpr size_t expected_batch = 10;
 
     // 启动数据源多路复用控制器，读取一定次数数据。
