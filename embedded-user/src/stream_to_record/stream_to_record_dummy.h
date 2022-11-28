@@ -27,7 +27,7 @@ namespace user
      * @brief 测试用记录提取器。
      * 将字节流提取为 @ref record_dummy_t 类型。
      */
-    class stream_to_record_dummy
+    class stream_to_record_dummy : public stream_to_record_base
     {
     public:
         std::any stream_to_record(const byte_array_t& stream) override
