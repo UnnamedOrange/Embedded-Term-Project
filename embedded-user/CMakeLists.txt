@@ -1,10 +1,12 @@
 cmake_minimum_required(VERSION 3.5)
 
 project(
-    embedded-user
+    embedded
     VERSION 0.0.0
     LANGUAGES C CXX
 )
+
+add_subdirectory("src/user")
 
 # Create executable target.
 add_executable(${PROJECT_NAME})
@@ -15,18 +17,10 @@ if(MSVC)
 else()
     target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Wpedantic) # -Werror
 endif()
-# Add additional include directories.
-target_include_directories(
-    ${PROJECT_NAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/src"
-                            "${CMAKE_CURRENT_SOURCE_DIR}/dep/readerwriterqueue"
-)
 # Add sources.
-file(GLOB_RECURSE CXX_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
-target_sources(${PROJECT_NAME} PRIVATE "${CXX_SOURCES}")
+target_sources(${PROJECT_NAME} PRIVATE "src/main.cpp")
 # Link libraries.
-if(UNIX)
-    target_link_libraries(${PROJECT_NAME} PRIVATE pthread)
-endif()
+target_link_libraries(${PROJECT_NAME} PRIVATE embedded-user)
 
 # Add tests.
 add_subdirectory("test")

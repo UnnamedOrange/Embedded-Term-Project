@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.5)
 
 project(
-    embedded-user-test
+    embedded-test
     VERSION 0.0.0
     LANGUAGES C CXX
 )
@@ -27,22 +27,14 @@ if(BUILD_TEST)
     endif()
     # Add additional include directories.
     target_include_directories(
-        ${PROJECT_NAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/../src"
-                                "${CMAKE_CURRENT_SOURCE_DIR}/../dep/readerwriterqueue"
-    )
-    target_include_directories(
         ${PROJECT_NAME} PRIVATE "${gtest_SOURCE_DIR}" "${gtest_SOURCE_DIR}/include"
     )
     # Add sources.
-    file(GLOB_RECURSE CXX_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/../src/*.cpp")
-    list(FILTER CXX_SOURCES EXCLUDE REGEX ".*main.cpp$") # Remove main.cpp.
-    file(GLOB_RECURSE CXX_TEST_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp")
-    target_sources(${PROJECT_NAME} PRIVATE "${CXX_SOURCES}" "${CXX_TEST_SOURCES}")
-    target_link_libraries(${PROJECT_NAME} PRIVATE gtest gtest_main)
+    file(GLOB_RECURSE CXX_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp")
+    target_sources(${PROJECT_NAME} PRIVATE "${CXX_SOURCES}")
     # Link libraries.
-    if(UNIX)
-        target_link_libraries(${PROJECT_NAME} PRIVATE pthread)
-    endif()
+    target_link_libraries(${PROJECT_NAME} PRIVATE embedded-user)
+    target_link_libraries(${PROJECT_NAME} PRIVATE gtest gtest_main)
 
     gtest_discover_tests(${PROJECT_NAME})
 endif()
