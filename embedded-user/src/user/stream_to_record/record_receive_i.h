@@ -21,6 +21,9 @@ namespace user
     class record_receive_i
     {
     public:
+        ~record_receive_i() = default;
+
+    public:
         /**
          * @brief 当收到新的记录时，该函数会被核心线程调用。
          *

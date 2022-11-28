@@ -21,6 +21,9 @@ namespace user
     class config_changed_i
     {
     public:
+        ~config_changed_i() = default;
+
+    public:
         /**
          * @brief 当配置被修改时，该函数将会被配置管理器所在线程调用。
          *
