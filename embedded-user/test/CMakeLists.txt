@@ -10,6 +10,7 @@ option(BUILD_TEST "Build all tests.")
 
 if(BUILD_TEST)
     # Introduce GoogleTest.
+    set(gtest_force_shared_crt ON)
     add_subdirectory("../dep/googletest" "dep/googletest")
     include(GoogleTest)
 
