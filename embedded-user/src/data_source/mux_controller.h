@@ -23,6 +23,8 @@ namespace user
 {
     /**
      * @brief 数据源多路复用控制器。将创建后台线程不断轮询数据源。
+     * 
+     * @note 内部不保存相关对象的 shared_ptr。
      */
     class mux_controller
     {
