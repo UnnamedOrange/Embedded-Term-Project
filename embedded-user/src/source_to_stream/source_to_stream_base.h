@@ -55,7 +55,7 @@ namespace user
         /**
          * @brief 核心线程回退一个字节到缓冲区。
          */
-        void unput(byte_t byte);
+        void unput_byte(byte_t byte);
 
     public:
         /**

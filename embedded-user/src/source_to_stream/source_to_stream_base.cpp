@@ -33,4 +33,7 @@ std::optional<byte_t> source_to_stream_base::next_byte()
     // 下一个字节尚未到来。
     return std::nullopt;
 }
-void source_to_stream_base::unput(byte_t byte) { unput_bytes.push_back(byte); }
+void source_to_stream_base::unput_byte(byte_t byte)
+{
+    unput_bytes.push_back(byte);
+}
