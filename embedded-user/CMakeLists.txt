@@ -6,7 +6,10 @@ project(
     LANGUAGES C CXX
 )
 
+# Add the core library.
 add_subdirectory("src/user")
+# Add Qt frontend executable (optional).
+add_subdirectory("src/qt-frontend")
 
 # Create executable target.
 add_executable(${PROJECT_NAME})

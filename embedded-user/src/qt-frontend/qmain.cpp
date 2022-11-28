@@ -1,13 +1,16 @@
 /**
- * @file main.cpp
+ * @file qmain.cpp
  * @author UnnamedOrange
- * @brief 嵌入式软件模块单独运行的入口。
+ * @brief 嵌入式 Qt 前端程序入口。
  *
  * @copyright Copyright (c) UnnamedOrange. Licensed under the MIT License.
  * See the LICENSE file in the repository root for full license text.
  */
 
-int main()
+#include <QApplication>
+
+int main(int argn, char** argv)
 {
-    // TODO: 编写样例程序。
+    QApplication app(argn, argv);
+    return app.exec();
 }
