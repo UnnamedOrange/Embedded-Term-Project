@@ -9,8 +9,12 @@
 
 #include <QApplication>
 
+#include <window/main_window.h>
+
 int main(int argn, char** argv)
 {
     QApplication app(argn, argv);
+    main_window window;
+    window.showFullScreen();
     return app.exec();
 }

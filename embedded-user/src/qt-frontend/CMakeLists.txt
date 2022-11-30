@@ -31,7 +31,7 @@ if(BUILD_QT_FRONTEND)
         target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Wpedantic) # -Werror
     endif()
     # Add additional include directories.
-    target_include_directories(${PROJECT_NAME} PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")
+    target_include_directories(${PROJECT_NAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")
     # Add sources.
     file(GLOB_RECURSE CXX_SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp"
          "${CMAKE_CURRENT_SOURCE_DIR}/*.ui"
