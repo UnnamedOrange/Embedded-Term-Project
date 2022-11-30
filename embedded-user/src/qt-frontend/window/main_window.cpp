@@ -49,7 +49,22 @@ void main_window::update_tree_sources()
     }
 }
 
-void main_window::on_button_remove_source_clicked() {}
+void main_window::on_button_remove_source_clicked()
+{
+    // 获取记录提取器对应数据源的序号。
+    auto selected_item = ui.tree_sources->currentItem();
+    assert(selected_item != nullptr);
+    auto parent_item = selected_item->parent();
+    assert(parent_item != nullptr);
+    auto data_source_index = ui.tree_sources->indexOfTopLevelItem(parent_item);
+    auto source_to_stream_index = parent_item->indexOfChild(selected_item);
+
+    // 删除记录提取器。
+    main_module.erase(data_source_index, source_to_stream_index);
+
+    // 更新树。
+    update_tree_sources();
+}
 void main_window::on_button_add_source_clicked()
 {
     // 获取现在选择的数据源的序号。

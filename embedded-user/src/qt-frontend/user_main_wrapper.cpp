@@ -69,6 +69,22 @@ std::shared_ptr<user::stream_to_record_base> user_main_wrapper::bind(
 
     return stream_to_record;
 }
+void user_main_wrapper::erase(size_t data_source_idx,
+                              size_t source_to_record_idx)
+{
+    // 获取数据流裁剪器和记录提取器在数组中的下标。
+    const auto& idx_pair = binded_pairs[data_source_idx][source_to_record_idx];
+    size_t source_to_stream_idx = idx_pair.first;
+    size_t stream_to_record_idx = idx_pair.second;
+    // 通过取消强引用进行线程安全的解绑。
+    source_to_stream_objects[source_to_stream_idx].reset();
+    stream_to_record_objects[stream_to_record_idx].reset();
+    // TODO: 考虑数组的清扫。
+
+    // 更新状态。
+    binded_pairs[data_source_idx].erase(binded_pairs[data_source_idx].begin() +
+                                        source_to_record_idx);
+}
 
 user::data_source_type user_main_wrapper::get_data_source_type(
     size_t data_source_idx) const

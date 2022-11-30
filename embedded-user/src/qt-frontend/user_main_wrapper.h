@@ -78,6 +78,16 @@ public:
      */
     std::shared_ptr<user::stream_to_record_base> bind(
         size_t data_source_idx, const std::string& reflection_name);
+    /**
+     * @brief 根据数据源下标和数据流裁剪器-记录提取器下标取消绑定。
+     * 并更新状态。
+     *
+     * @param data_source_idx 数据源下标。
+     * @see data_sources
+     * @param source_to_record_idx 数据流裁剪器-记录提取器下标。
+     * @see binded_pairs
+     */
+    void erase(size_t data_source_idx, size_t source_to_record_idx);
 
 public:
     /**
