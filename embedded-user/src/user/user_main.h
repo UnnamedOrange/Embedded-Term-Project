@@ -24,7 +24,7 @@ namespace user
      */
     class user_main
     {
-    private:
+    protected:
         std::vector<std::shared_ptr<data_source_base>>
             data_sources; // 数据源列表。
         std::vector<std::shared_ptr<source_to_stream_base>>
