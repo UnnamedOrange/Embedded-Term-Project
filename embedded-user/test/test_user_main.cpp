@@ -27,12 +27,7 @@ TEST(user_main, dummy)
 {
     using namespace user;
 
-    // 创建并绑定对象。
-    auto dummy_source = std::make_shared<data_source_dummy>();
-    auto dummy_source_to_stream = std::make_shared<source_to_stream_dummy>();
-    auto dummy_stream_to_record = std::make_shared<stream_to_record_dummy>();
-    dummy_stream_to_record->set_source_to_stream(dummy_source_to_stream);
-
+    // 创建对象。
     class dummy_receive_t : public record_receive_i
     {
     public:
@@ -48,7 +43,6 @@ TEST(user_main, dummy)
         }
     };
     auto dummy_receive = std::make_shared<dummy_receive_t>();
-    dummy_stream_to_record->register_interface(dummy_receive);
 
     // 定义相关常量。
     constexpr size_t expected_batch = 10;
@@ -58,8 +52,21 @@ TEST(user_main, dummy)
     // 启动核心模块并绑定，读取一定次数数据。
     {
         user_main main_module;
-        main_module.bind(dummy_source, dummy_source_to_stream);
-        main_module.register_object(dummy_stream_to_record);
+        {
+            auto dummy_source = std::make_shared<data_source_dummy>();
+            main_module.register_object(dummy_source);
+            auto dummy_source_to_stream =
+                std::make_shared<source_to_stream_dummy>();
+            main_module.register_object(dummy_source_to_stream);
+            auto dummy_stream_to_record =
+                std::make_shared<stream_to_record_dummy>();
+            main_module.register_object(dummy_stream_to_record);
+
+            dummy_stream_to_record->set_source_to_stream(
+                dummy_source_to_stream);
+            dummy_stream_to_record->register_interface(dummy_receive);
+            main_module.bind(dummy_source, dummy_source_to_stream);
+        }
 
         // 延时相应次数对应的时间。
         std::this_thread::sleep_for((0.5 + expected_batch) *

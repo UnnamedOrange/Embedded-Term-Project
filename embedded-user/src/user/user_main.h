@@ -36,17 +36,31 @@ namespace user
     public:
         /**
          * @brief 在多路复用控制器中绑定数据源和数据流裁剪器。
-         * 同时注册数据源和数据流裁剪器，防止被销毁。
+         *
+         * @note 需要手动注册数据源和数据流裁剪器，防止被销毁。
+         *
+         * @see register_object
          */
         void bind(const std::shared_ptr<data_source_base>& data_source,
                   const std::shared_ptr<source_to_stream_base>&
                       source_to_stream_object)
         {
-            data_sources.push_back(data_source);
-            source_to_stream_objects.push_back(source_to_stream_object);
             mux.bind(data_source, source_to_stream_object);
         }
 
+        /**
+         * @brief 注册对象，防止对象被销毁。
+         */
+        void register_object(
+            const std::shared_ptr<data_source_base>& data_source)
+        {
+            data_sources.push_back(data_source);
+        }
+        void register_object(const std::shared_ptr<source_to_stream_base>&
+                                 source_to_stream_object)
+        {
+            source_to_stream_objects.push_back(source_to_stream_object);
+        }
         /**
          * @brief 注册对象，防止对象被销毁。
          */
