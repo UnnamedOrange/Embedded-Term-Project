@@ -28,6 +28,11 @@ private:
 public:
     main_window(QWidget* parent = nullptr);
 
+private slots:
+    void on_button_remove_source_clicked();
+    void on_button_add_source_clicked();
+    void _on_tree_sources_selection_changed();
+
 private:
     void update_tree_sources();
 };
