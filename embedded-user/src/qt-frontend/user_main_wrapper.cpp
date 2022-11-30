@@ -70,6 +70,11 @@ std::shared_ptr<user::stream_to_record_base> user_main_wrapper::bind(
     return stream_to_record;
 }
 
+user::data_source_type user_main_wrapper::get_data_source_type(
+    size_t data_source_idx) const
+{
+    return data_sources[data_source_idx]->type();
+}
 const std::vector<std::string> user_main_wrapper::get_data_source_names()
 {
     std::vector<std::string> names;

@@ -81,6 +81,10 @@ public:
 
 public:
     /**
+     * @brief 获取指定下标数据源的类型。
+     */
+    user::data_source_type get_data_source_type(size_t data_source_idx) const;
+    /**
      * @brief 获取数据源名字列表。下标与数据源下标对应。
      */
     const std::vector<std::string> get_data_source_names();

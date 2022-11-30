@@ -11,6 +11,8 @@
 
 #include <QTreeWidgetItem>
 
+#include "add_source_to_record.h"
+
 main_window::main_window(QWidget* parent) : QMainWindow(parent)
 {
     ui.setupUi(this);
@@ -43,11 +45,33 @@ void main_window::update_tree_sources()
             auto source_to_stream_item = new QTreeWidgetItem(data_source_item);
             source_to_stream_item->setText(0, vec[j].c_str());
         }
+        data_source_item->setExpanded(true);
     }
 }
 
 void main_window::on_button_remove_source_clicked() {}
-void main_window::on_button_add_source_clicked() {}
+void main_window::on_button_add_source_clicked()
+{
+    // 获取现在选择的数据源的序号。
+    auto selected_item = ui.tree_sources->currentItem();
+    int data_source_idx = ui.tree_sources->indexOfTopLevelItem(selected_item);
+    assert(data_source_idx != -1);
+
+    // 弹出对话框，选择要添加的记录提取器。
+    add_source_to_record dialog(
+        main_module.get_data_source_type(data_source_idx), this);
+    if (dialog.exec() == QDialog::Rejected)
+        return;
+    auto selected_type = dialog.get_selected_type();
+
+    // 将记录提取器添加到主模块。
+    auto stream_to_record = main_module.bind(data_source_idx, selected_type);
+
+    // 更新树。
+    update_tree_sources();
+
+    // TODO: 绑定记录接收器。
+}
 void main_window::_on_tree_sources_selection_changed()
 {
     auto item = ui.tree_sources->currentItem();
