@@ -32,16 +32,61 @@ using reflection_maps_t =
 
 /**
  * @brief 真实应用场景下嵌入式软件核心模块的包装。
- * 准备好可用的数据源、数据流裁剪器、记录提取器。
+ * 辅助记录当前的状态。
  */
 class user_main_wrapper : public user::user_main
 {
 public:
+    /**
+     * @brief 数据流裁剪器-记录提取器的反射表。由人工指定。
+     *
+     * @see reflection_def.h
+     */
     static const reflection_maps_t reflection_maps;
+
+private:
+    // 已经绑定的数据源和数据流裁剪器的下标。
+    std::vector<std::vector<std::pair<size_t, size_t>>> binded_pairs;
 
 public:
     user_main_wrapper();
 
 private:
+    // 注册某个类型的单个数据源。
+    template <typename data_source_t, typename... R>
+    void register_data_source(R&&... args)
+    {
+        register_object(
+            std::make_shared<data_source_t>(std::forward<R>(args)...));
+    }
+    // 注册所有可用的数据源。由人工指定。
+    /**
+     * @see reflection_def.h
+     */
     void register_available_data_sources();
+
+public:
+    /**
+     * @brief 根据数据源下标和数据流裁剪器-记录提取器反射名绑定。
+     * 并更新状态。
+     *
+     * @param data_source_idx 数据源下标。
+     * @see register_available_data_sources
+     * @param reflection_name 数据流裁剪器-记录提取器反射名。
+     * @see reflection_maps
+     * @return std::shared_ptr<user::stream_to_record_base> 记录提取器。
+     */
+    std::shared_ptr<user::stream_to_record_base> bind(
+        size_t data_source_idx, const std::string& reflection_name);
+
+public:
+    /**
+     * @brief 获取数据源名字列表。下标与数据源下标对应。
+     */
+    const std::vector<std::string> get_data_source_names();
+    /**
+     * @brief 获取数据源名下的数据流裁剪器列表。
+     * 下标与额外保存的数据流裁剪器-记录提取器下标对应。
+     */
+    const std::vector<std::vector<std::string>> get_source_to_stream_names();
 };

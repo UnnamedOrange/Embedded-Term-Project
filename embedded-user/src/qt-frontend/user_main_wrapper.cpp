@@ -30,16 +30,66 @@ auto make_generator()
 }
 
 const reflection_maps_t user_main_wrapper::reflection_maps = {
-#include "reflection_def"
+#include "def_reflection.h"
 };
 
 user_main_wrapper::user_main_wrapper()
 {
     // 启动时，注册所有可用的数据源。
     register_available_data_sources();
+    // 注册数据源后，初始化数组大小。
+    binded_pairs.resize(data_sources.size());
 }
 
-void user_main_wrapper::register_available_data_sources()
+void user_main_wrapper::register_available_data_sources(){
+#include "def_data_source.h"
+}
+
+std::shared_ptr<user::stream_to_record_base> user_main_wrapper::bind(
+    size_t data_source_idx, const std::string& reflection_name)
 {
-    register_object(std::make_shared<user::data_source_dummy>());
+    // 获取数据源。
+    auto& data_source = data_sources[data_source_idx];
+    // 获取数据源对应的反射函数。
+    const auto& generator =
+        reflection_maps.at(data_source->type()).at(reflection_name);
+    // 生成数据流裁剪器和记录提取器。
+    auto [source_to_stream, stream_to_record] = generator();
+    // 绑定三者。
+    stream_to_record->set_source_to_stream(source_to_stream);
+    mux.bind(data_source, source_to_stream);
+
+    // 更新状态。
+    {
+        binded_pairs[data_source_idx].emplace_back(
+            source_to_stream_objects.size(), stream_to_record_objects.size());
+        source_to_stream_objects.push_back(std::move(source_to_stream));
+        stream_to_record_objects.push_back(stream_to_record); // 返回。
+    }
+
+    return stream_to_record;
+}
+
+const std::vector<std::string> user_main_wrapper::get_data_source_names()
+{
+    std::vector<std::string> names;
+    for (const auto& data_source : data_sources)
+    {
+        names.push_back(data_source->name());
+    }
+    return names;
+}
+const std::vector<std::vector<std::string>> user_main_wrapper::
+    get_source_to_stream_names()
+{
+    std::vector<std::vector<std::string>> names(data_sources.size());
+    for (size_t i = 0; i < names.size(); i++)
+    {
+        const auto& idx_vec = binded_pairs[i];
+        auto& name_vec = names[i];
+        for (size_t j = 0; j < idx_vec.size(); j++)
+            name_vec.emplace_back(
+                source_to_stream_objects[idx_vec[j].first]->name());
+    }
+    return names;
 }

@@ -13,6 +13,8 @@
 
 #include <QMainWindow>
 
+#include <user_main_wrapper.h>
+
 class main_window : public QMainWindow
 {
     Q_OBJECT
@@ -20,6 +22,12 @@ class main_window : public QMainWindow
 private:
     Ui::main_window ui;
 
+private:
+    user_main_wrapper main_module;
+
 public:
     main_window(QWidget* parent = nullptr);
+
+private:
+    void update_tree_sources();
 };
