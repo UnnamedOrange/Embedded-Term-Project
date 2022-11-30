@@ -69,6 +69,14 @@
     </item>
     <item row="1" column="0" colspan="2">
      <widget class="QTreeWidget" name="tree_sources">
+      <property name="font">
+       <font>
+        <pointsize>16</pointsize>
+       </font>
+      </property>
+      <attribute name="headerVisible">
+       <bool>false</bool>
+      </attribute>
       <column>
        <property name="text">
         <string notr="true">1</string>
