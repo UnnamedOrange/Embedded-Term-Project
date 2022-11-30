@@ -33,8 +33,14 @@ if(BUILD_QT_FRONTEND)
     # Add additional include directories.
     target_include_directories(${PROJECT_NAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")
     # Add sources.
-    file(GLOB_RECURSE CXX_SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp"
-         "${CMAKE_CURRENT_SOURCE_DIR}/*.ui"
+    file(
+        GLOB_RECURSE
+        CXX_SOURCES
+        CONFIGURE_DEPENDS
+        "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/*.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/*.hpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/*.ui"
     )
     target_sources(${PROJECT_NAME} PRIVATE "${CXX_SOURCES}")
     # Link libraries.

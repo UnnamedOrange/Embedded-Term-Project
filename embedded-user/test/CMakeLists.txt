@@ -34,7 +34,9 @@ if(BUILD_TEST)
         ${PROJECT_NAME} PRIVATE "${gtest_SOURCE_DIR}" "${gtest_SOURCE_DIR}/include"
     )
     # Add sources.
-    file(GLOB_RECURSE CXX_SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp")
+    file(GLOB_RECURSE CXX_SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp"
+         "${CMAKE_CURRENT_SOURCE_DIR}/*.h" "${CMAKE_CURRENT_SOURCE_DIR}/*.hpp"
+    )
     target_sources(${PROJECT_NAME} PRIVATE "${CXX_SOURCES}")
     # Link libraries.
     target_link_libraries(${PROJECT_NAME} PRIVATE embedded-user)
