@@ -19,9 +19,6 @@ namespace user
      */
     class data_source_base
     {
-    private:
-        bool working = false; // 是否正在工作。
-
     public:
         virtual ~data_source_base() = default;
 
