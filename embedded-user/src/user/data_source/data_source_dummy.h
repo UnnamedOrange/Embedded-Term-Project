@@ -11,6 +11,7 @@
 
 #include <cstdint>
 #include <random>
+#include <string>
 
 #include "data_source_base.h"
 #include "data_source_type.h"
@@ -43,6 +44,7 @@ namespace user
         {
             return data_source_type::dummy;
         }
+        std::string name() const override { return "Dummy"; }
 
         byte_array_t read(size_t size, int) override
         {

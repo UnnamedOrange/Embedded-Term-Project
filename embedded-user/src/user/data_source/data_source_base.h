@@ -9,6 +9,8 @@
 
 #pragma once
 
+#include <string>
+
 #include "data_source_type.h"
 #include "data_source_utility.h"
 
@@ -27,6 +29,10 @@ namespace user
          * @brief 获取数据源类型。
          */
         virtual data_source_type type() const = 0;
+        /**
+         * @brief 获取数据源名字。
+         */
+        virtual std::string name() const = 0;
 
         /**
          * @brief 从数据源读取数据。
