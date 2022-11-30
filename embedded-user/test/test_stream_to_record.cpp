@@ -53,7 +53,7 @@ TEST(stream_to_record, dummy)
     // 定义相关常量。
     constexpr size_t expected_batch = 10;
     constexpr size_t expected_elements =
-        expected_batch * data_source_dummy::size_per_read / 4;
+        expected_batch * source_to_stream_dummy::size_per_read / 4;
 
     // 启动核心模块并绑定，读取一定次数数据。
     {

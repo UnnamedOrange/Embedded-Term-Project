@@ -22,11 +22,22 @@ namespace user
      */
     class source_to_stream_dummy : public source_to_stream_base
     {
+    public:
+        /**
+         * @brief 每次读取的数据流的大小。
+         */
+        static constexpr size_t size_per_read = 20;
+
     private:
         size_t current_idx{};
         std::array<byte_t, 4> buffer{};
 
     public:
+        void read_data_source(
+            const std::shared_ptr<data_source_base>& data_source) override
+        {
+            async_push(data_source->read(size_per_read, 0));
+        }
         std::optional<byte_array_t> next() override
         {
             // Note: next 函数一般要读取多个字节，

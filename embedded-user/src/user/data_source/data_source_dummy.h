@@ -28,10 +28,6 @@ namespace user
     public:
         using clock_t = utils::system_steady_clock;
         /**
-         * @brief 每次读取的数据流的大小。
-         */
-        static constexpr size_t size_per_read = 20;
-        /**
          * @brief 每次可读数据的间隔时间。
          */
         static constexpr clock_t::duration interval = 100ms;
@@ -48,7 +44,7 @@ namespace user
             return data_source_type::dummy;
         }
 
-        byte_array_t read() override
+        byte_array_t read(size_t size, int) override
         {
             // 每经过 interval 可读取到一次新的数据。
             {
@@ -57,10 +53,12 @@ namespace user
                 last_time_point = clock_t::now();
             }
 
-            byte_array_t ret(size_per_read);
+            byte_array_t ret(size);
             for (auto& byte : ret)
                 byte = static_cast<byte_t>(engine());
             return ret;
         }
+
+        void write(const byte_array_t&) override {}
     };
 } // namespace user

@@ -14,6 +14,7 @@
 
 #include <readerwriterqueue.h>
 
+#include <data_source/data_source_base.h>
 #include <data_source/data_source_utility.h>
 
 namespace user
@@ -36,7 +37,7 @@ namespace user
     public:
         virtual ~source_to_stream_base() = default;
 
-    public:
+    protected:
         /**
          * @brief 异步发送字节流。
          *
@@ -58,6 +59,11 @@ namespace user
         void unput_byte(byte_t byte);
 
     public:
+        /**
+         * @brief 根据当前状态对数据源进行下一次读取。
+         */
+        virtual void read_data_source(
+            const std::shared_ptr<data_source_base>& data_source) = 0;
         /**
          * @brief 核心线程获取裁剪后的下一个字节流。
          *

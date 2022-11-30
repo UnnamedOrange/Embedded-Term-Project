@@ -53,5 +53,5 @@ TEST(data_source, dummy)
             break;
         bytes_read += byte_array->size();
     }
-    EXPECT_EQ(bytes_read, expected_batch * data_source_dummy::size_per_read);
+    EXPECT_EQ(bytes_read, expected_batch * source_to_stream_dummy::size_per_read);
 }

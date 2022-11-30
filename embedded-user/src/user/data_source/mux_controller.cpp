@@ -33,25 +33,19 @@ void mux_controller::background_routine()
                     bindings.insert(kv);
             };
         auto poll_data_sources = [&]() { // 轮询数据源。
-            std::weak_ptr<data_source_base> previous_data_source;
             byte_array_t previous_byte_array;
             for (auto& [data_source, source_to_stream_object] : bindings)
             {
-                // 如果数据源是另一个，则读取。
-                if (!utils::owner_equal(data_source, previous_data_source))
-                {
-                    auto data_source_shared = data_source.lock();
-                    if (!data_source_shared)
-                        continue; // 防止线程安全问题。
-                    // 非阻塞读数据源。
-                    previous_byte_array = data_source_shared->read();
-                    previous_data_source = data_source;
-                }
+                auto data_source_shared = data_source.lock();
+                if (!data_source_shared)
+                    continue; // 防止线程安全问题。
                 auto source_to_stream_object_shared =
                     source_to_stream_object.lock();
                 if (!source_to_stream_object_shared)
                     continue; // 防止线程安全问题。
-                source_to_stream_object_shared->async_push(previous_byte_array);
+                // 非阻塞读数据源。
+                source_to_stream_object_shared->read_data_source(
+                    data_source_shared);
             }
         };
 
