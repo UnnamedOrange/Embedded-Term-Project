@@ -10,6 +10,7 @@
 #pragma once
 
 #include <optional>
+#include <string>
 #include <vector>
 
 #include <readerwriterqueue.h>
@@ -36,6 +37,12 @@ namespace user
 
     public:
         virtual ~source_to_stream_base() = default;
+
+    public:
+        /**
+         * @brief 获取数据流裁剪器名字。
+         */
+        virtual std::string name() const = 0;
 
     protected:
         /**

@@ -33,6 +33,9 @@ namespace user
         std::array<byte_t, 4> buffer{};
 
     public:
+        std::string name() const override { return "Dummy source to stream"; }
+
+    public:
         void read_data_source(
             const std::shared_ptr<data_source_base>& data_source) override
         {
