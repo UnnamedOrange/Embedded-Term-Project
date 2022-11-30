@@ -114,3 +114,11 @@ const std::vector<std::vector<std::string>> user_main_wrapper::
     }
     return names;
 }
+
+std::shared_ptr<user::stream_to_record_base> user_main_wrapper::
+    get_stream_to_record(size_t data_source_idx,
+                         size_t source_to_record_idx) const
+{
+    return stream_to_record_objects
+        [binded_pairs[data_source_idx][source_to_record_idx].second];
+}

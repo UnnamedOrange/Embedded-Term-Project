@@ -103,4 +103,16 @@ public:
      * 下标与额外保存的数据流裁剪器-记录提取器下标对应。
      */
     const std::vector<std::vector<std::string>> get_source_to_stream_names();
+
+public:
+    /**
+     * @brief 根据数据源下标和数据流裁剪器-记录提取器下标获取记录提取器强引用。
+     *
+     * @param data_source_idx 数据源下标。
+     * @see data_sources
+     * @param source_to_record_idx 数据流裁剪器-记录提取器下标。
+     * @see binded_pairs
+     */
+    std::shared_ptr<user::stream_to_record_base> get_stream_to_record(
+        size_t data_source_idx, size_t source_to_record_idx) const;
 };
