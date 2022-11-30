@@ -6,7 +6,7 @@ project(
     LANGUAGES C CXX
 )
 
-option(BUILD_TEST "Build all tests.")
+option(BUILD_TEST "Build all tests." ON)
 
 if(BUILD_TEST)
     # Introduce GoogleTest.

@@ -6,7 +6,7 @@ project(
     LANGUAGES C CXX
 )
 
-option(BUILD_QT_FRONTEND "Build Qt frontend.")
+option(BUILD_QT_FRONTEND "Build Qt frontend." ON)
 
 if(BUILD_QT_FRONTEND)
     # Configure Qt.
