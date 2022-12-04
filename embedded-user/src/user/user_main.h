@@ -77,7 +77,8 @@ namespace user
         void read_all() const
         {
             for (const auto& t : stream_to_record_objects)
-                t->read_all();
+                if (t)
+                    t->read_all();
         }
     };
 } // namespace user
