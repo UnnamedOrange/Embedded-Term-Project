@@ -61,7 +61,7 @@ TEST(stream_to_record, dummy)
         main_module.bind(dummy_source, dummy_source_to_stream);
 
         // 延时相应次数对应的时间。
-        std::this_thread::sleep_for((0.5 + expected_batch) *
+        std::this_thread::sleep_for((expected_batch - 0.5) *
                                     data_source_dummy::interval);
     }
     // 测试核心模块的正常析构。

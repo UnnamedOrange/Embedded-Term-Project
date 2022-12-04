@@ -39,7 +39,7 @@ TEST(data_source, dummy)
         mux.bind(dummy_source, dummy_source_to_stream);
 
         // 延时相应次数对应的时间。
-        std::this_thread::sleep_for((0.5 + expected_batch) *
+        std::this_thread::sleep_for((expected_batch - 0.5) *
                                     data_source_dummy::interval);
     }
     // 测试数据源多路复用控制器的正常析构。
@@ -53,5 +53,6 @@ TEST(data_source, dummy)
             break;
         bytes_read += byte_array->size();
     }
-    EXPECT_EQ(bytes_read, expected_batch * source_to_stream_dummy::size_per_read);
+    EXPECT_EQ(bytes_read,
+              expected_batch * source_to_stream_dummy::size_per_read);
 }

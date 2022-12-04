@@ -29,17 +29,28 @@ namespace user
         static constexpr size_t size_per_read = 4;
 
     private:
+        static constexpr int mux_address_size = 256;
+        inline static int next_mux_address = 0;
+        int mux_address;
+
+    private:
         size_t current_idx{};
         std::array<byte_t, 4> buffer{};
 
     public:
-        std::string name() const override { return "Dummy source to stream"; }
+        source_to_stream_dummy() : mux_address(next_mux_address)
+        {
+            next_mux_address = (next_mux_address + 1) % mux_address_size;
+        }
+
+    public:
+        std::string name() const override { return "Dummy stream"; }
 
     public:
         void read_data_source(
             const std::shared_ptr<data_source_base>& data_source) override
         {
-            async_push(data_source->read(size_per_read, 0));
+            async_push(data_source->read(size_per_read, mux_address));
         }
         std::optional<byte_array_t> next() override
         {

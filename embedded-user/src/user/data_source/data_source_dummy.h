@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include <array>
 #include <cassert>
 #include <cstdint>
 #include <random>
@@ -23,7 +24,7 @@ namespace user
 {
     /**
      * @brief 测试用虚拟数据源。
-     * 每过 100ms 生成 20 字节数据。
+     * 每过 100ms 生成 4 字节数据。
      */
     class data_source_dummy : public data_source_base
     {
@@ -38,7 +39,7 @@ namespace user
         std::random_device rd;
         std::default_random_engine engine{rd()};
         std::uniform_int_distribution<int32_t> int32_dist{-64, 63};
-        clock_t::time_point last_time_point{clock_t::now()};
+        std::array<clock_t::time_point, 256> last_time_point{};
 
     public:
         data_source_type type() const override
@@ -47,13 +48,14 @@ namespace user
         }
         std::string name() const override { return "Dummy"; }
 
-        byte_array_t read(size_t size, int) override
+        byte_array_t read(size_t size, int mux_address) override
         {
             // 每经过 interval 可读取到一次新的数据。
             {
-                if (clock_t::now() - last_time_point < interval)
+                mux_address = mux_address % last_time_point.size();
+                if (clock_t::now() - last_time_point[mux_address] < interval)
                     return {};
-                last_time_point = clock_t::now();
+                last_time_point[mux_address] = clock_t::now();
             }
 
             assert(size == 4);
