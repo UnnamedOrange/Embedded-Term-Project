@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include <cassert>
 #include <cstdint>
 #include <random>
 #include <string>
@@ -36,7 +37,7 @@ namespace user
     private:
         std::random_device rd;
         std::default_random_engine engine{rd()};
-        std::uniform_int_distribution<unsigned> byte_dist{0, 255};
+        std::uniform_int_distribution<int32_t> int32_dist{-64, 63};
         clock_t::time_point last_time_point{clock_t::now()};
 
     public:
@@ -55,9 +56,9 @@ namespace user
                 last_time_point = clock_t::now();
             }
 
+            assert(size == 4);
             byte_array_t ret(size);
-            for (auto& byte : ret)
-                byte = static_cast<byte_t>(engine());
+            *reinterpret_cast<int32_t*>(ret.data()) = int32_dist(engine);
             return ret;
         }
 

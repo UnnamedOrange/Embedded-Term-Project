@@ -26,7 +26,7 @@ namespace user
         /**
          * @brief 每次读取的数据流的大小。
          */
-        static constexpr size_t size_per_read = 20;
+        static constexpr size_t size_per_read = 4;
 
     private:
         size_t current_idx{};
