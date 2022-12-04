@@ -21,13 +21,7 @@ namespace user
      */
     class record_writer_base : virtual public record_receive_i
     {
-    private:
-        // TODO: 设计成员变量。
-
     public:
         virtual ~record_writer_base() = default;
-
-    public:
-        // TODO: 设计成员函数。
     };
 } // namespace user

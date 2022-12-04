@@ -19,10 +19,5 @@ namespace user
      */
     class config_change
     {
-    private:
-        // TODO: 设计成员变量。
-
-    public:
-        // TODO: 设计成员函数。
     };
 } // namespace user

@@ -21,10 +21,5 @@ namespace user
      */
     class data_source_controller : public config_changed_i
     {
-    private:
-        // TODO: 设计成员变量。
-
-    public:
-        // TODO: 设计成员函数。
     };
 } // namespace user
