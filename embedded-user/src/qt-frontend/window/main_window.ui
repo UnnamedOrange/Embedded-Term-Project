@@ -83,7 +83,7 @@
      </widget>
     </item>
     <item row="1" column="2" colspan="2">
-     <widget class="QListView" name="list_views"/>
+     <widget class="QListWidget" name="list_views"/>
     </item>
    </layout>
   </widget>

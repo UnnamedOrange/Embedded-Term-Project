@@ -128,7 +128,11 @@ void main_window::on_button_add_source_clicked()
         auto view = new points_view(stream_to_record, ui.list_views);
         stream_to_record->register_interface(view->get_record_receive());
 
-        // TODO: 加入到列表。
+        // 将项目加入到列表。
+        auto item = new QListWidgetItem(ui.list_views);
+        item->setSizeHint(view->size());
+        ui.list_views->addItem(item);
+        ui.list_views->setItemWidget(item, view);
     }
 }
 void main_window::_on_tree_sources_selection_changed()
