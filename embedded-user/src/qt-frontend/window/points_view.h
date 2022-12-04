@@ -50,7 +50,8 @@ private:
     Ui::points_view ui;
 
 private:
-    std::shared_ptr<record_receive_i> record_receive;
+    std::shared_ptr<record_receive_i> record_receive{
+        std::make_shared<record_receive_i>(*this)};
     std::weak_ptr<user::stream_to_record_base> stream_to_record;
 
 private:
