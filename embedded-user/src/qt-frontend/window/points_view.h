@@ -12,8 +12,8 @@
 
 #include <any>
 #include <cstdint>
+#include <deque>
 #include <memory>
-#include <vector>
 
 #include <QPaintEvent>
 #include <QWidget>
@@ -41,6 +41,8 @@ private:
             // TODO: 支持自定义显示。
             const auto& value = std::any_cast<const int32_t&>(record);
             parent.points.push_back(value);
+            while (parent.points.size() > parent.capacity())
+                parent.points.pop_front();
             parent.repaint();
         }
     };
@@ -55,13 +57,10 @@ private:
     std::weak_ptr<user::stream_to_record_base> stream_to_record;
 
 private:
-    std::vector<int32_t> points;
+    std::deque<int32_t> points;
 
 public:
-    std::shared_ptr<record_receive_i> get_record_receive()
-    {
-        return record_receive;
-    }
+    std::shared_ptr<user::record_receive_i> get_record_receive() const;
 
 public:
     points_view(std::shared_ptr<user::stream_to_record_base> stream_to_record,
@@ -69,4 +68,7 @@ public:
 
 protected:
     void paintEvent(QPaintEvent* event) override;
+
+public:
+    size_t capacity() const;
 };

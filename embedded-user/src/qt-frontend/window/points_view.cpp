@@ -18,6 +18,11 @@ points_view::points_view(
     ui.setupUi(this);
 }
 
+std::shared_ptr<user::record_receive_i> points_view::get_record_receive() const
+{
+    return record_receive;
+}
+
 void points_view::paintEvent(QPaintEvent* event)
 {
     QPainter painter(this);
@@ -29,4 +34,10 @@ void points_view::paintEvent(QPaintEvent* event)
     {
         painter.drawPoint(i, points[i]);
     }
+}
+
+size_t points_view::capacity() const
+{
+    // TODO: 计算实际容量。
+    return width();
 }
