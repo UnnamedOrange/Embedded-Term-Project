@@ -52,6 +52,10 @@ void points_view::paintEvent(QPaintEvent* event)
     painter.setPen(QPen(Qt::black, axis_line_width));
     painter.drawRect(margin, margin, width() - 2 * margin,
                      height() - 2 * margin);
+    // 绘制文字。
+    painter.setClipRect(event->rect());
+    painter.setPen(QPen(Qt::black, 1));
+    painter.drawText(event->rect(), QString::number(per_second));
 }
 
 size_t points_view::capacity() const

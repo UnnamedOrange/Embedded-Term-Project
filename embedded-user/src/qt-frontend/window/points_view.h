@@ -11,6 +11,8 @@
 #include "ui_points_view.h"
 
 #include <any>
+#include <array>
+#include <chrono>
 #include <cstdint>
 #include <deque>
 #include <memory>
@@ -20,6 +22,7 @@
 
 #include <stream_to_record/record_receive_i.h>
 #include <stream_to_record/stream_to_record_base.h>
+#include <utils/system_clock.hpp>
 
 class points_view : public QWidget
 {
@@ -31,12 +34,29 @@ private:
     private:
         points_view& parent;
 
+    private:
+        std::array<utils::system_steady_clock::time_point, 10> time_points{};
+        size_t crt_idx{};
+
     public:
         record_receive_i(points_view& parent) : parent(parent) {}
 
     public:
         void record_receive(const std::any& record) override
         {
+            // 记录时间并计算速率。
+            auto time_point = utils::system_steady_clock::now();
+            auto time_span = time_point - time_points[crt_idx];
+            time_points[crt_idx] = time_point;
+            crt_idx++;
+            if (crt_idx >= time_points.size())
+                crt_idx = 0;
+            using seconds = std::chrono::duration<double>;
+            double per_second =
+                time_points.size() /
+                std::chrono::duration_cast<seconds>(time_span).count();
+            parent.per_second = per_second;
+
             // 将 record 看作 32 位有符号整数。
             // TODO: 支持自定义显示。
             const auto& value = std::any_cast<const int32_t&>(record);
@@ -58,10 +78,11 @@ private:
 
 private:
     std::deque<int32_t> points;
+    double per_second{};
 
     // 绘图参数。
 private:
-    static constexpr qreal margin = 8.0;
+    static constexpr qreal margin = 20.0;
     static constexpr qreal axis_line_width = 2.0;
     static constexpr qreal data_line_width = 1.0;
     static constexpr qreal point_interval = 4.0;
