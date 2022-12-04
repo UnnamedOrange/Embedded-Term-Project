@@ -24,9 +24,13 @@ private:
 
 private:
     user_main_wrapper main_module;
+    int background_timer_id{};
 
 public:
     main_window(QWidget* parent = nullptr);
+
+protected:
+    void timerEvent(QTimerEvent* event) override;
 
 private slots:
     void on_button_remove_source_clicked();

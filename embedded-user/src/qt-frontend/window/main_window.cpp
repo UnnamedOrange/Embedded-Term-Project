@@ -18,12 +18,26 @@ main_window::main_window(QWidget* parent) : QMainWindow(parent)
 {
     ui.setupUi(this);
 
+    // 初始化。
     update_tree_sources();
+
+    // 设置信号槽。
     // TODO: 解决效果不完美的问题。
     connect(ui.tree_sources, &QTreeWidget::currentItemChanged, this,
             &main_window::_on_tree_sources_selection_changed);
     connect(ui.tree_sources, &QTreeWidget::itemSelectionChanged, this,
             &main_window::_on_tree_sources_selection_changed);
+
+    // 设置定时器。
+    background_timer_id = startTimer(0);
+}
+
+void main_window::timerEvent(QTimerEvent* event)
+{
+    if (event->timerId() == background_timer_id)
+    {
+        main_module.read_all();
+    }
 }
 
 void main_window::update_tree_sources()
