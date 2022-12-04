@@ -23,10 +23,17 @@ main_window::main_window(QWidget* parent) : QMainWindow(parent)
 
     // 设置信号槽。
     // TODO: 解决效果不完美的问题。
-    connect(ui.tree_sources, &QTreeWidget::currentItemChanged, this,
-            &main_window::_on_tree_sources_selection_changed);
-    connect(ui.tree_sources, &QTreeWidget::itemSelectionChanged, this,
-            &main_window::_on_tree_sources_selection_changed);
+    {
+        connect(ui.tree_sources, &QTreeWidget::currentItemChanged, this,
+                &main_window::_on_tree_sources_selection_changed);
+        connect(ui.tree_sources, &QTreeWidget::itemSelectionChanged, this,
+                &main_window::_on_tree_sources_selection_changed);
+
+        connect(ui.list_views, &QListWidget::currentItemChanged, this,
+                &main_window::_on_list_views_selection_changed);
+        connect(ui.list_views, &QListWidget::itemSelectionChanged, this,
+                &main_window::_on_list_views_selection_changed);
+    }
 
     // 设置定时器。
     background_timer_id = startTimer(0);
@@ -135,6 +142,21 @@ void main_window::on_button_add_source_clicked()
         ui.list_views->setItemWidget(item, view);
     }
 }
+void main_window::on_button_remove_view_clicked()
+{
+    // 获取当前选中的项目。
+    auto selected_item = ui.list_views->currentItem();
+    assert(selected_item != nullptr);
+
+    // 获取视图。
+    auto view =
+        dynamic_cast<points_view*>(ui.list_views->itemWidget(selected_item));
+    assert(view != nullptr);
+
+    // 删除视图。
+    delete view;
+    delete selected_item;
+}
 void main_window::_on_tree_sources_selection_changed()
 {
     auto item = ui.tree_sources->currentItem();
@@ -157,4 +179,15 @@ void main_window::_on_tree_sources_selection_changed()
         ui.button_remove_source->setEnabled(true);
         ui.button_add_source->setEnabled(true);
     }
+}
+void main_window::_on_list_views_selection_changed()
+{
+    int index = ui.list_views->currentRow();
+    if (~index && !ui.list_views->currentItem()->isSelected())
+        index = -1;
+    // 如果选中了视图，则允许删除视图。
+    if (index == -1)
+        ui.button_remove_view->setEnabled(false);
+    else
+        ui.button_remove_view->setEnabled(true);
 }

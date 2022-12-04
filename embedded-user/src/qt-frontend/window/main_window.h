@@ -35,7 +35,9 @@ protected:
 private slots:
     void on_button_remove_source_clicked();
     void on_button_add_source_clicked();
+    void on_button_remove_view_clicked();
     void _on_tree_sources_selection_changed();
+    void _on_list_views_selection_changed();
 
 private:
     void update_tree_sources();

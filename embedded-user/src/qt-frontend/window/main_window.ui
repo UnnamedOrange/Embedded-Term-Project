@@ -51,14 +51,17 @@
      </spacer>
     </item>
     <item row="0" column="3">
-     <widget class="QPushButton" name="button_settings">
+     <widget class="QPushButton" name="button_remove_view">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="font">
        <font>
         <pointsize>20</pointsize>
        </font>
       </property>
       <property name="text">
-       <string>设置</string>
+       <string>-</string>
       </property>
      </widget>
     </item>
