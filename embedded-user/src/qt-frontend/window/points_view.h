@@ -43,7 +43,7 @@ private:
             parent.points.push_back(value);
             while (parent.points.size() > parent.capacity())
                 parent.points.pop_front();
-            parent.repaint();
+            parent.update();
         }
     };
     friend record_receive_i;
