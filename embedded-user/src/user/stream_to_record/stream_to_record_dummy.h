@@ -18,10 +18,7 @@ namespace user
     /**
      * @brief 测试用记录。仅包含一个 32 位有符号整数。
      */
-    struct record_dummy_t
-    {
-        int32_t number;
-    };
+    using record_dummy_t = int32_t;
 
     /**
      * @brief 测试用记录提取器。
