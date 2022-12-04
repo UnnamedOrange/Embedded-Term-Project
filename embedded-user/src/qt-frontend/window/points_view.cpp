@@ -41,3 +41,7 @@ size_t points_view::capacity() const
     // TODO: 计算实际容量。
     return width();
 }
+bool points_view::expired() const noexcept
+{
+    return stream_to_record.expired();
+}

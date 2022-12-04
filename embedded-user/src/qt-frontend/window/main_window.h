@@ -24,7 +24,8 @@ private:
 
 private:
     user_main_wrapper main_module;
-    int background_timer_id{};
+    int background_timer_id{}; // 更新 main_module 的定时器。闲时运行。
+    int clean_timer_id{};      // 清理 view 的定时器。
 
 public:
     main_window(QWidget* parent = nullptr);

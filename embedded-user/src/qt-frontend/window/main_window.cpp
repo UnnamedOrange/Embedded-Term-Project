@@ -7,12 +7,16 @@
  * See the LICENSE file in the repository root for full license text.
  */
 
+#include <chrono>
+
 #include "main_window.h"
 
 #include <QTreeWidgetItem>
 
 #include "add_source_to_record.h"
 #include "points_view.h"
+
+using namespace std::literals;
 
 main_window::main_window(QWidget* parent) : QMainWindow(parent)
 {
@@ -44,6 +48,24 @@ void main_window::timerEvent(QTimerEvent* event)
     if (event->timerId() == background_timer_id)
     {
         main_module.read_all();
+    }
+    else if (event->timerId() == clean_timer_id)
+    {
+        killTimer(clean_timer_id);
+        clean_timer_id = 0;
+        // 清扫 view。
+        for (int i = 0; i < ui.list_views->count(); i++)
+        {
+            auto item = ui.list_views->item(i);
+            auto view =
+                dynamic_cast<points_view*>(ui.list_views->itemWidget(item));
+            if (view->expired())
+            {
+                delete view;
+                delete item;
+                i--;
+            }
+        }
     }
 }
 
@@ -86,6 +108,11 @@ void main_window::on_button_remove_source_clicked()
 
     // 更新树。
     update_tree_sources();
+
+    // 延迟清扫 view。
+    if (clean_timer_id)
+        killTimer(clean_timer_id);
+    clean_timer_id = startTimer(5s);
 }
 void main_window::on_button_add_source_clicked()
 {

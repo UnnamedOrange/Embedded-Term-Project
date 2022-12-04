@@ -71,4 +71,5 @@ protected:
 
 public:
     size_t capacity() const;
+    bool expired() const noexcept;
 };
