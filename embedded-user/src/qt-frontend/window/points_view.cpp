@@ -26,20 +26,37 @@ std::shared_ptr<user::record_receive_i> points_view::get_record_receive() const
 void points_view::paintEvent(QPaintEvent* event)
 {
     QPainter painter(this);
-    // 绘制坐标轴。
+    painter.setRenderHint(QPainter::Antialiasing);
+    // 绘制辅助线。
+    painter.setClipRect(margin, margin, width() - margin * 2,
+                        height() - margin * 2);
+    painter.setPen(QPen(Qt::gray, 1));
     painter.drawLine(0, height() / 2, width(), height() / 2);
-    painter.drawLine(width() / 2, 0, width() / 2, height());
-    // 绘制点。
-    for (size_t i = 0; i < points.size(); i++)
+    // 绘制图像。
+    constexpr auto transform_x = [&](size_t x) -> qreal {
+        return margin + x * point_interval;
+    };
+    auto transform_y = [&](int32_t y) -> qreal {
+        return height() / 2 - y * point_interval / 4.0;
+    };
+    painter.setClipRect(margin, margin, width() - margin * 2,
+                        height() - margin * 2);
+    painter.setPen(QPen(Qt::red, data_line_width));
+    for (size_t i = 1; i < points.size(); i++)
     {
-        painter.drawPoint(i, points[i]);
+        painter.drawLine(QPoint(transform_x(i - 1), transform_y(points[i - 1])),
+                         QPoint(transform_x(i), transform_y(points[i])));
     }
+    // 绘制坐标轴。
+    painter.setClipRect(event->rect());
+    painter.setPen(QPen(Qt::black, axis_line_width));
+    painter.drawRect(margin, margin, width() - 2 * margin,
+                     height() - 2 * margin);
 }
 
 size_t points_view::capacity() const
 {
-    // TODO: 计算实际容量。
-    return width();
+    return (width() - margin * 2) / point_interval;
 }
 bool points_view::expired() const noexcept
 {

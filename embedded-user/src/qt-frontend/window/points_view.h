@@ -59,6 +59,13 @@ private:
 private:
     std::deque<int32_t> points;
 
+    // 绘图参数。
+private:
+    static constexpr qreal margin = 8.0;
+    static constexpr qreal axis_line_width = 2.0;
+    static constexpr qreal data_line_width = 1.0;
+    static constexpr qreal point_interval = 4.0;
+
 public:
     std::shared_ptr<user::record_receive_i> get_record_receive() const;
 
