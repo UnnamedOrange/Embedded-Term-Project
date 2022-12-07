@@ -31,5 +31,5 @@ file(GLOB_RECURSE CXX_SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/*.c
 target_sources(${PROJECT_NAME} PRIVATE "${CXX_SOURCES}")
 # Link libraries.
 if(UNIX)
-    target_link_libraries(${PROJECT_NAME} PRIVATE pthread)
+    target_link_libraries(${PROJECT_NAME} PRIVATE pthread stdc++fs)
 endif()
