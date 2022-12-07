@@ -21,9 +21,6 @@ namespace user
 {
     /**
      * @brief 数据写入器基类。
-     *
-     * @todo 设计成员变量。
-     * @todo 设计成员函数。
      */
     class record_writer_base : virtual public record_receive_i
     {
