@@ -109,6 +109,14 @@ void main_window::on_button_remove_source_clicked()
     // 更新树。
     update_tree_sources();
 
+    // 通知 view 重画。
+    for (int i = 0; i < ui.list_views->count(); i++)
+    {
+        auto item = ui.list_views->item(i);
+        auto view = ui.list_views->itemWidget(item);
+        view->update();
+    }
+
     // 延迟清扫 view。
     if (clean_timer_id)
         killTimer(clean_timer_id);
