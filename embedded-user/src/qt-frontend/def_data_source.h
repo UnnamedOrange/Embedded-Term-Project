@@ -7,4 +7,6 @@
  * See the LICENSE file in the repository root for full license text.
  */
 
+// clang-format off
 register_data_source<user::data_source_dummy>();
+// clang-format on
