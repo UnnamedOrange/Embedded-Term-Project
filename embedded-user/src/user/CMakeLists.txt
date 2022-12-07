@@ -6,9 +6,15 @@ project(
     LANGUAGES C CXX
 )
 
+option(BUILD_I2C "Enable I2C data source." ON)
+
 # Create library target.
 add_library(${PROJECT_NAME})
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
+# Add customed definitions.
+if(BUILD_I2C)
+    target_compile_definitions(${PROJECT_NAME} PUBLIC BUILD_I2C=1)
+endif()
 # Set warning level.
 if(MSVC)
     target_compile_options(${PROJECT_NAME} PRIVATE /W4) # /WX

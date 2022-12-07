@@ -11,9 +11,11 @@
 
 // 可用的数据源。
 #include <data_source/data_source_dummy.h>
+#include <data_source/data_source_i2c.h>
 
 // 可用的数据流裁剪器。
 #include <source_to_stream/source_to_stream_dummy.h>
+#include <source_to_stream/source_to_stream_i2c_demo.h>
 
 // 可用的记录提取器。
 #include <stream_to_record/stream_to_record_dummy.h>

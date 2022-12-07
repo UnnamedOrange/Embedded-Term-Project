@@ -9,4 +9,5 @@
 
 // clang-format off
 register_data_source<user::data_source_dummy>();
+register_data_source<user::data_source_i2c>();
 // clang-format on

@@ -14,4 +14,10 @@
         {"dummy", make_generator<user::source_to_stream_dummy, user::stream_to_record_dummy, user::record_writer_dummy>()},
     }
 },
+{
+    user::data_source_type::i2c,
+    {
+        {"i2c demo", make_generator<user::source_to_stream_i2c_demo, user::stream_to_record_dummy, user::record_writer_dummy>()},
+    }
+},
     // clang-format on
