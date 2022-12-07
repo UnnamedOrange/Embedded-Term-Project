@@ -17,6 +17,10 @@ using namespace std::chrono_literals;
 namespace utils
 {
     /**
+     * @brief System clock used in the system.
+     */
+    using system_clock = std::chrono::system_clock;
+    /**
      * @brief Steady clock used in the system.
      */
     using system_steady_clock = std::chrono::steady_clock;

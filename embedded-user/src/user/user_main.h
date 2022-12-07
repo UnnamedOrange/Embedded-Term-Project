@@ -15,6 +15,7 @@
 #include <data_source/data_source_base.h>
 #include <data_source/mux_controller.h>
 #include <source_to_stream/source_to_stream_base.h>
+#include <stream_to_record/record_writer_base.h>
 #include <stream_to_record/stream_to_record_base.h>
 
 namespace user
@@ -31,6 +32,8 @@ namespace user
             source_to_stream_objects; // 数据流裁剪器列表。
         std::vector<std::shared_ptr<stream_to_record_base>>
             stream_to_record_objects; // 记录提取器列表。
+        std::vector<std::shared_ptr<record_writer_base>>
+            record_writer_objects; // 记录写入器列表。
         mux_controller mux; // 多路复用控制器将数据源和数据流裁剪器连接起来。
 
     public:
@@ -56,6 +59,9 @@ namespace user
         {
             data_sources.push_back(data_source);
         }
+        /**
+         * @brief 注册对象，防止对象被销毁。
+         */
         void register_object(const std::shared_ptr<source_to_stream_base>&
                                  source_to_stream_object)
         {
@@ -68,6 +74,14 @@ namespace user
                                  stream_to_record_object)
         {
             stream_to_record_objects.push_back(stream_to_record_object);
+        }
+        /**
+         * @brief 注册对象，防止对象被销毁。
+         */
+        void register_object(
+            const std::shared_ptr<record_writer_base>& record_writer_object)
+        {
+            record_writer_objects.push_back(record_writer_object);
         }
 
     public:

@@ -10,6 +10,6 @@
 {
     user::data_source_type::dummy,
     {
-        {"dummy", make_generator<user::source_to_stream_dummy, user::stream_to_record_dummy>()},
+        {"dummy", make_generator<user::source_to_stream_dummy, user::stream_to_record_dummy, user::record_writer_dummy>()},
     }
 },

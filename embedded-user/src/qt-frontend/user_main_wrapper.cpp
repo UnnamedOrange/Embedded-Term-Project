@@ -18,14 +18,20 @@
 // 可用的记录提取器。
 #include <stream_to_record/stream_to_record_dummy.h>
 
-template <typename source_to_stream_t, typename stream_to_record_t>
+// 可用的记录写入器。
+#include <stream_to_record/record_writer_dummy.h>
+
+template <typename source_to_stream_t, typename stream_to_record_t,
+          typename record_writer_t>
 auto make_generator()
 {
     return []() -> source_to_record_t {
         auto source_to_stream = std::make_shared<source_to_stream_t>();
         auto stream_to_record = std::make_shared<stream_to_record_t>();
         stream_to_record->set_source_to_stream(source_to_stream);
-        return std::make_pair(source_to_stream, stream_to_record);
+        auto record_writer = std::make_shared<record_writer_t>();
+        stream_to_record->register_interface(record_writer);
+        return std::tuple(source_to_stream, stream_to_record, record_writer);
     };
 }
 
@@ -54,7 +60,7 @@ std::shared_ptr<user::stream_to_record_base> user_main_wrapper::bind(
     const auto& generator =
         reflection_maps.at(data_source->type()).at(reflection_name);
     // 生成数据流裁剪器和记录提取器。
-    auto [source_to_stream, stream_to_record] = generator();
+    auto [source_to_stream, stream_to_record, record_writer] = generator();
     // 绑定三者。
     stream_to_record->set_source_to_stream(source_to_stream);
     mux.bind(data_source, source_to_stream);
@@ -65,6 +71,7 @@ std::shared_ptr<user::stream_to_record_base> user_main_wrapper::bind(
             source_to_stream_objects.size(), stream_to_record_objects.size());
         source_to_stream_objects.push_back(std::move(source_to_stream));
         stream_to_record_objects.push_back(stream_to_record); // 返回。
+        record_writer_objects.push_back(std::move(record_writer));
     }
 
     return stream_to_record;
@@ -79,6 +86,7 @@ void user_main_wrapper::erase(size_t data_source_idx,
     // 通过取消强引用进行线程安全的解绑。
     source_to_stream_objects[source_to_stream_idx].reset();
     stream_to_record_objects[stream_to_record_idx].reset();
+    record_writer_objects[stream_to_record_idx].reset();
     // TODO: 考虑数组的清扫。
 
     // 更新状态。

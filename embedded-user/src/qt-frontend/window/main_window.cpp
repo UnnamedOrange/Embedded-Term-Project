@@ -142,8 +142,6 @@ void main_window::on_button_add_source_clicked()
 
         // 更新树。
         update_tree_sources();
-
-        // TODO: 绑定记录接收器。
     }
     else // 记录提取器。
     {

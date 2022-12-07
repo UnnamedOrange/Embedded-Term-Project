@@ -12,6 +12,7 @@
 #include <functional>
 #include <memory>
 #include <string>
+#include <tuple>
 #include <unordered_map>
 #include <utility>
 #include <vector>
@@ -19,12 +20,14 @@
 #include <data_source/data_source_base.h>
 #include <data_source/data_source_type.h>
 #include <source_to_stream/source_to_stream_base.h>
+#include <stream_to_record/record_writer_base.h>
 #include <stream_to_record/stream_to_record_base.h>
 #include <user_main.h>
 
 using source_to_record_t =
-    std::pair<std::shared_ptr<user::source_to_stream_base>,
-              std::shared_ptr<user::stream_to_record_base>>;
+    std::tuple<std::shared_ptr<user::source_to_stream_base>,
+               std::shared_ptr<user::stream_to_record_base>,
+               std::shared_ptr<user::record_writer_base>>;
 using generator_t = std::function<source_to_record_t()>;
 using reflection_t = std::unordered_map<std::string, generator_t>;
 using reflection_maps_t =
