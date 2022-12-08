@@ -9,6 +9,12 @@
 
 #pragma once
 
+#if defined(BUILD_I2C)
+#include <bcm2835.h>
+
+#include "bcm2835_wrapper.h"
+#endif
+
 #include "data_source_base.h"
 #include "data_source_type.h"
 #include "data_source_utility.h"
