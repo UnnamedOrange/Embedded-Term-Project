@@ -24,6 +24,9 @@ endif()
 # Add additional include directories.
 target_include_directories(${PROJECT_NAME} PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")
 target_include_directories(${PROJECT_NAME} PUBLIC "${CMAKE_SOURCE_DIR}/dep/readerwriterqueue")
+if(BUILD_I2C)
+    target_include_directories(${PROJECT_NAME} PUBLIC "${CMAKE_SOURCE_DIR}/dep/bcm2835")
+endif()
 # Add sources.
 file(GLOB_RECURSE CXX_SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp"
      "${CMAKE_CURRENT_SOURCE_DIR}/*.h" "${CMAKE_CURRENT_SOURCE_DIR}/*.hpp"
@@ -32,4 +35,7 @@ target_sources(${PROJECT_NAME} PRIVATE "${CXX_SOURCES}")
 # Link libraries.
 if(UNIX)
     target_link_libraries(${PROJECT_NAME} PRIVATE pthread stdc++fs)
+endif()
+if(BUILD_I2C)
+    target_sources(${PROJECT_NAME} PRIVATE "${CMAKE_SOURCE_DIR}/dep/bcm2835/bcm2835.c")
 endif()
