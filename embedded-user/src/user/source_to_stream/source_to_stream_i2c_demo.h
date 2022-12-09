@@ -31,7 +31,6 @@ namespace user
         void read_data_source(
             const std::shared_ptr<data_source_base>& data_source) override
         {
-
             data_source->write({static_cast<byte_t>(data_size)}); // 长度。
             auto data = data_source->read(data_size, mux_address);
             if (data.size() != data_size)
