@@ -16,6 +16,9 @@
 
 namespace user
 {
+    /**
+     * @brief 用于 I2C 演示的数据流裁剪类。仅作演示，以四字节为单位裁剪数据。
+     */
     class source_to_stream_i2c_demo : public source_to_stream_base
     {
     private:

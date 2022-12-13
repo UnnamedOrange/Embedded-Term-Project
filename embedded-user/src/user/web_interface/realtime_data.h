@@ -18,6 +18,9 @@
 
 namespace user
 {
+    /**
+     * @brief 向远程发送信息的接口。仅作演示，只能接受 32 位有符号整数。
+     */
     class realtime_data : virtual public record_receive_i
     {
     public:
