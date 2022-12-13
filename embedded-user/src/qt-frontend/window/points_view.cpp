@@ -20,7 +20,7 @@ points_view::points_view(
 
 std::shared_ptr<user::record_receive_i> points_view::get_record_receive() const
 {
-    return record_receive;
+    return local_handler;
 }
 
 void points_view::paintEvent(QPaintEvent* event)

@@ -29,7 +29,7 @@ class points_view : public QWidget
     Q_OBJECT
 
 private:
-    class record_receive_i : virtual public user::record_receive_i
+    class local_handler_i : virtual public user::record_receive_i
     {
     private:
         points_view& parent;
@@ -39,7 +39,7 @@ private:
         size_t crt_idx{};
 
     public:
-        record_receive_i(points_view& parent) : parent(parent) {}
+        local_handler_i(points_view& parent) : parent(parent) {}
 
     public:
         void record_receive(const std::any& record) override
@@ -66,14 +66,14 @@ private:
             parent.update();
         }
     };
-    friend record_receive_i;
+    friend local_handler_i;
 
 private:
     Ui::points_view ui;
 
 private:
-    std::shared_ptr<record_receive_i> record_receive{
-        std::make_shared<record_receive_i>(*this)};
+    std::shared_ptr<local_handler_i> local_handler{
+        std::make_shared<local_handler_i>(*this)};
     std::weak_ptr<user::stream_to_record_base> stream_to_record;
 
 private:
