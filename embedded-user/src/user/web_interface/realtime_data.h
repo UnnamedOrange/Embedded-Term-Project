@@ -35,8 +35,8 @@ namespace user
 
     private:
         inline static int max_key = 0; // 目前最大的 key，用于生成下一个 key。
-        int key{};                     // 用于区分不同的波形。
-        int idx{};                     // 数据点序号计数器。
+        int key = ++max_key; // 用于区分不同的波形。
+        int idx{};           // 数据点序号计数器。
 
     private:
         moodycamel::ReaderWriterQueue<int32_t> queue; // 待发送的数据。
@@ -51,13 +51,19 @@ namespace user
             {
                 hv::Json data;
                 int32_t value;
+                bool has_data = false;
                 while (queue.try_dequeue(value))
-                    data[std::to_string(idx++)] = value;
-
-                http_headers headers;
-                headers["Content-Type"] = "application/json";
-                headers["data_key"] = key;
-                requests::post(url.data(), data.dump(), headers);
+                {
+                    has_data = true;
+                    data[std::to_string(idx++)] = std::to_string(value);
+                }
+                if (has_data)
+                {
+                    http_headers headers;
+                    headers["Content-Type"] = "application/json";
+                    headers["data_key"] = std::to_string(key);
+                    requests::post(url.data(), data.dump(), headers);
+                }
                 std::this_thread::sleep_for(100ms);
             }
         }
