@@ -64,7 +64,7 @@ file(GLOB_RECURSE CXX_SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/*.c
 target_sources(${PROJECT_NAME} PRIVATE "${CXX_SOURCES}")
 # Link libraries.
 if(UNIX)
-    target_link_libraries(${PROJECT_NAME} PRIVATE pthread stdc++fs)
+    target_link_libraries(${PROJECT_NAME} PRIVATE pthread stdc++fs atomic)
 endif()
 if(BUILD_I2C)
     target_sources(${PROJECT_NAME} PRIVATE "${CMAKE_SOURCE_DIR}/dep/bcm2835/bcm2835.c")
