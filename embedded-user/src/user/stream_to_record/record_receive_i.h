@@ -21,7 +21,7 @@ namespace user
     class record_receive_i
     {
     public:
-        ~record_receive_i() = default;
+        virtual ~record_receive_i() = default;
 
     public:
         /**

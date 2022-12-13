@@ -21,7 +21,7 @@ namespace user
     class config_changed_i
     {
     public:
-        ~config_changed_i() = default;
+        virtual ~config_changed_i() = default;
 
     public:
         /**
