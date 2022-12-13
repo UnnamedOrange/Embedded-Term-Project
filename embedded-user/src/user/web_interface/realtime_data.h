@@ -64,7 +64,7 @@ namespace user
                     headers["data_key"] = std::to_string(key);
                     requests::post(url.data(), data.dump(), headers);
                 }
-                std::this_thread::sleep_for(100ms);
+                std::this_thread::sleep_for(1000ms);
             }
         }
 
