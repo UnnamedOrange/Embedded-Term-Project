@@ -29,7 +29,7 @@ class points_view : public QWidget
     Q_OBJECT
 
 private:
-    class record_receive_i : public user::record_receive_i
+    class record_receive_i : virtual public user::record_receive_i
     {
     private:
         points_view& parent;
