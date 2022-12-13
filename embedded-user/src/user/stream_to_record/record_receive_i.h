@@ -21,6 +21,14 @@ namespace user
     class record_receive_i
     {
     public:
-        virtual std::any record_receive() = 0;
+        virtual ~record_receive_i() = default;
+
+    public:
+        /**
+         * @brief 当收到新的记录时，该函数会被核心线程调用。
+         *
+         * @param record 记录。其具体类型由绑定的数据源裁剪器决定。
+         */
+        virtual void record_receive(const std::any& record) = 0;
     };
 } // namespace user

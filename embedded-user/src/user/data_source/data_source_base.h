@@ -9,6 +9,8 @@
 
 #pragma once
 
+#include <string>
+
 #include "data_source_type.h"
 #include "data_source_utility.h"
 
@@ -19,10 +21,6 @@ namespace user
      */
     class data_source_base
     {
-    private:
-        bool working = false; // 是否正在工作。
-        int mux_address = 0;  // 多路复用地址。
-
     public:
         virtual ~data_source_base() = default;
 
@@ -31,14 +29,28 @@ namespace user
          * @brief 获取数据源类型。
          */
         virtual data_source_type type() const = 0;
+        /**
+         * @brief 获取数据源名字。
+         */
+        virtual std::string name() const = 0;
 
         /**
          * @brief 从数据源读取数据。
          *
          * @note 该函数不会因为数据源没有数据而阻塞。
          *
-         * @return 读取到的字节流。
+         * @param size 要读取的字节数。
+         * @param mux_address 多路复用地址。
+         * @return byte_array_t 读取到的字节流。
+         * 不保证长度与 size 相同。
          */
-        virtual byte_array_t read() = 0;
+        virtual byte_array_t read(size_t size, int mux_address) = 0;
+
+        /**
+         * @brief 向数据源写入数据。
+         *
+         * @param byte_array 要写入的内容。
+         */
+        virtual void write(const byte_array_t& byte_array) = 0;
     };
 } // namespace user

@@ -16,6 +16,8 @@ namespace user
 {
     /**
      * @brief 字节类型。
+     * 
+     * @todo 考虑时间戳的记录。
      */
     using byte_t = uint8_t;
     /**

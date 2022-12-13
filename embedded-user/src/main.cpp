@@ -7,4 +7,7 @@
  * See the LICENSE file in the repository root for full license text.
  */
 
-int main(int argn, char** argv) {}
+int main()
+{
+    // TODO: 编写样例程序。
+}
