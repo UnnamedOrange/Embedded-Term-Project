@@ -22,6 +22,11 @@ std::shared_ptr<user::record_receive_i> points_view::get_record_receive() const
 {
     return local_handler;
 }
+std::shared_ptr<user::record_receive_i> points_view::get_record_receive_2()
+    const
+{
+    return remote_handler;
+}
 
 void points_view::paintEvent(QPaintEvent* event)
 {

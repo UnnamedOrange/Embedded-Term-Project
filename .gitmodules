@@ -4,3 +4,6 @@
 [submodule "embedded-user/dep/googletest"]
 	path = embedded-user/dep/googletest
 	url = https://github.com/google/googletest
+[submodule "embedded-user/dep/libhv"]
+	path = embedded-user/dep/libhv
+	url = https://github.com/ithewei/libhv.git

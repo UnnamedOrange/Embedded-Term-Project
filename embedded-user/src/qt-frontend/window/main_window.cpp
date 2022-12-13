@@ -167,6 +167,7 @@ void main_window::on_button_add_source_clicked()
         // 新建视图，并绑定记录提取器。
         auto view = new points_view(stream_to_record, ui.list_views);
         stream_to_record->register_interface(view->get_record_receive());
+        stream_to_record->register_interface(view->get_record_receive_2());
 
         // 将项目加入到列表。
         auto item = new QListWidgetItem(ui.list_views);

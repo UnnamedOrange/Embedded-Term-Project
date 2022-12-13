@@ -23,6 +23,7 @@
 #include <stream_to_record/record_receive_i.h>
 #include <stream_to_record/stream_to_record_base.h>
 #include <utils/system_clock.hpp>
+#include <web_interface/realtime_data.h>
 
 class points_view : public QWidget
 {
@@ -74,6 +75,8 @@ private:
 private:
     std::shared_ptr<local_handler_i> local_handler{
         std::make_shared<local_handler_i>(*this)};
+    std::shared_ptr<user::realtime_data> remote_handler{
+        std::make_shared<user::realtime_data>()};
     std::weak_ptr<user::stream_to_record_base> stream_to_record;
 
 private:
@@ -89,6 +92,7 @@ private:
 
 public:
     std::shared_ptr<user::record_receive_i> get_record_receive() const;
+    std::shared_ptr<user::record_receive_i> get_record_receive_2() const;
 
 public:
     points_view(std::shared_ptr<user::stream_to_record_base> stream_to_record,

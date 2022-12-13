@@ -8,6 +8,35 @@ project(
 
 option(BUILD_I2C "Enable I2C data source." ON)
 
+# Setup libhv.
+set(BUILD_EXAMPLES
+    OFF
+    CACHE BOOL "" FORCE
+)
+set(BUILD_STATIC
+    OFF
+    CACHE BOOL "" FORCE
+)
+add_subdirectory("${CMAKE_SOURCE_DIR}/dep/libhv" "${CMAKE_BINARY_DIR}/dep/libhv")
+set(HV_SRCDIRS
+    .
+    base
+    ssl
+    event
+    event/kcp
+    util
+    cpputil
+    evpp
+    protocol
+    http
+    http/client
+    http/server
+    mqtt
+)
+foreach(SRCDIR ${HV_SRCDIRS})
+    list(APPEND HV_SRCDIRS_PREFIXED "${CMAKE_SOURCE_DIR}/dep/libhv/${SRCDIR}")
+endforeach()
+
 # Create library target.
 add_library(${PROJECT_NAME})
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
@@ -24,6 +53,7 @@ endif()
 # Add additional include directories.
 target_include_directories(${PROJECT_NAME} PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")
 target_include_directories(${PROJECT_NAME} PUBLIC "${CMAKE_SOURCE_DIR}/dep/readerwriterqueue")
+target_include_directories(${PROJECT_NAME} PUBLIC "${HV_SRCDIRS_PREFIXED}")
 if(BUILD_I2C)
     target_include_directories(${PROJECT_NAME} PUBLIC "${CMAKE_SOURCE_DIR}/dep/bcm2835")
 endif()
@@ -39,3 +69,4 @@ endif()
 if(BUILD_I2C)
     target_sources(${PROJECT_NAME} PRIVATE "${CMAKE_SOURCE_DIR}/dep/bcm2835/bcm2835.c")
 endif()
+target_link_libraries(${PROJECT_NAME} PRIVATE hv)
